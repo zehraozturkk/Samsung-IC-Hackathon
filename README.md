@@ -3,6 +3,8 @@
 Müşterinin yüklediği kıyafet/kombin görselini Gemini 2.5 Flash ile analiz eder,
 LC Waikiki kataloğundan benzer ürünleri eşleştirir, kombin önerir ve kampanya metni üretir.
 
+#### Rapor -> docs\samsung-IC-hackathon.pdf altında bulunmaktadır. 
+
 ## Çalıştırma
 
 ```
