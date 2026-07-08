@@ -14,6 +14,26 @@ const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 app.use(express.static(__dirname));
 app.use(express.json());
 
+// Katalog backend'te okunur: katalog.csv → ön yüze hazır JSON
+const fs = require('fs');
+const HEADER_MAP = { 'ürün adı': 'ad', 'ad': 'ad', 'tür': 'kategori', 'kategori': 'kategori', 'renk': 'renk', 'tarz': 'tarz', 'stil': 'tarz', 'fiyat': 'fiyat' };
+app.get('/api/catalog', (req, res) => {
+    try {
+        const lines = fs.readFileSync(path.join(__dirname, 'data', 'catalog.csv'), 'utf8').trim().split(/\r?\n/).filter(l => l.trim());
+        const sep = lines[0].includes(';') ? ';' : ',';
+        const head = lines[0].split(sep).map(h => HEADER_MAP[h.trim().toLowerCase()] || h.trim().toLowerCase());
+        const catalog = lines.slice(1).map(l => {
+            const c = l.split(sep), o = {};
+            head.forEach((h, i) => o[h] = (c[i] || '').trim());
+            o.fiyat = parseFloat(String(o.fiyat || 0).replace(',', '.')) || 0;
+            return o;
+        }).filter(o => o.ad);
+        res.json(catalog);
+    } catch (e) {
+        res.status(500).json({ error: 'katalog.csv okunamadı: ' + e.message });
+    }
+});
+
 app.post('/api/generate', upload.single('gorsel'), async (req, res) => {
     try {
         const prompt = req.body.prompt;

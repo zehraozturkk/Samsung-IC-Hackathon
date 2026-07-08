@@ -4,53 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LCW Kampanya Stüdyosu</title>
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',system-ui,sans-serif; }
-  body { background:#f4f6fa; color:#1a2332; min-height:100vh; }
-  header { background:#00265e; color:#fff; padding:16px 32px; display:flex; align-items:center; gap:12px; }
-  header .logo { background:#fff; color:#00265e; font-weight:800; padding:4px 10px; border-radius:6px; }
-  header h1 { font-size:1.1rem; font-weight:600; }
-  main { max-width:1100px; margin:24px auto; padding:0 16px; }
-
-  /* Akış çubuğu */
-  .flow { display:flex; gap:8px; margin-bottom:24px; overflow-x:auto; }
-  .step { flex:1; min-width:120px; background:#fff; border:2px solid #e2e8f0; border-radius:10px;
-          padding:10px 8px; text-align:center; font-size:.78rem; color:#8895a7; transition:.3s; }
-  .step b { display:block; font-size:1.1rem; margin-bottom:2px; }
-  .step.active { border-color:#0d5eba; color:#0d5eba; background:#eaf2fd; }
-  .step.done { border-color:#16a34a; color:#16a34a; background:#f0fdf4; }
-
-  .grid { display:grid; grid-template-columns:340px 1fr; gap:20px; }
-  @media (max-width:800px){ .grid{grid-template-columns:1fr;} }
-
-  .card { background:#fff; border-radius:12px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,.06); margin-bottom:20px; }
-  .card h2 { font-size:.95rem; margin-bottom:12px; color:#00265e; }
-
-  label { font-size:.8rem; font-weight:600; display:block; margin:10px 0 4px; }
-  input[type=text], input[type=password], select { width:100%; padding:8px 10px; border:1px solid #d5dce6; border-radius:8px; font-size:.85rem; }
-  .drop { border:2px dashed #b9c5d6; border-radius:10px; padding:24px; text-align:center; cursor:pointer; color:#8895a7; font-size:.85rem; transition:.2s; }
-  .drop:hover, .drop.over { border-color:#0d5eba; color:#0d5eba; background:#eaf2fd; }
-  .drop img { max-width:100%; max-height:220px; border-radius:8px; }
-  button.primary { width:100%; margin-top:16px; background:#0d5eba; color:#fff; border:0; padding:12px; border-radius:8px;
-                   font-size:.95rem; font-weight:600; cursor:pointer; }
-  button.primary:hover { background:#0a4a94; }
-  button.primary:disabled { background:#b9c5d6; cursor:not-allowed; }
-  .hint { font-size:.72rem; color:#8895a7; margin-top:6px; }
-
-  .out { display:none; }
-  .out.show { display:block; animation:fade .4s; }
-  @keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1;} }
-  .tag { display:inline-block; background:#eaf2fd; color:#0d5eba; padding:3px 10px; border-radius:20px; font-size:.75rem; margin:3px 3px 0 0; }
-  .item { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eef1f6; font-size:.85rem; }
-  .item:last-child { border:0; }
-  .item .price { font-weight:700; color:#00265e; white-space:nowrap; }
-  .total { display:flex; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:2px solid #00265e; font-weight:800; }
-  .campaign { background:#fff8ec; border:1px solid #f3d9a4; border-radius:10px; padding:14px; font-size:.9rem; line-height:1.5; white-space:pre-wrap; }
-  .analysis-text { font-size:.85rem; line-height:1.5; color:#3d4b5f; }
-  .spinner { display:none; margin:20px auto; width:32px; height:32px; border:4px solid #eaf2fd; border-top-color:#0d5eba; border-radius:50%; animation:spin .8s linear infinite; }
-  @keyframes spin { to{transform:rotate(360deg);} }
-  .error { display:none; background:#fef2f2; color:#b91c1c; padding:10px 14px; border-radius:8px; font-size:.82rem; margin-top:10px; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -61,7 +15,7 @@
 
 <main>
   <!-- AKIŞ -->
-  <div class="flow" id="flow">
+  <div class="flow">
     <div class="step" data-s="1"><b>1</b>Görsel Yükle</div>
     <div class="step" data-s="2"><b>2</b>AI Görsel Analizi</div>
     <div class="step" data-s="3"><b>3</b>Katalog Eşleştirme</div>
@@ -82,8 +36,11 @@
         <label>Stil tercihi (opsiyonel)</label>
         <select id="style">
           <option value="">Fark etmez</option>
-          <option>Streetwear</option><option>Casual</option><option>Old Money</option>
-          <option>Spor</option><option>Ofis / Smart Casual</option>
+          <option>Streetwear (Sokak)</option>
+          <option>Casual (Günlük)</option>
+          <option>Classic (Klasik)</option>
+          <option>Old Money</option>
+          <option>Spor</option>
         </select>
 
         <label>Bütçe (opsiyonel)</label>
@@ -94,26 +51,17 @@
           <option value="3500">3.500 TL altı</option>
         </select>
 
-        <div id="keyRow">
-          <label>Gemini API Key</label>
-          <input type="password" id="apiKey" placeholder="AIza... (veya ai/config.js içine yazın)">
-          <div class="hint">Tarayıcıda saklanır, sunucuya gitmez.</div>
-        </div>
-
-        <label>Ürün kataloğu CSV (opsiyonel)</label>
-        <input type="file" id="csv" accept=".csv">
-        <div class="hint" id="catInfo"></div>
-
         <button class="primary" id="go" disabled>✨ Analiz Et ve Kampanya Oluştur</button>
+        <div class="hint" id="catInfo">Katalog yükleniyor…</div>
         <div class="error" id="err"></div>
       </div>
     </div>
 
     <!-- SAĞ: ÇIKTILAR -->
-    <div>
+    <div class="results">
       <div class="spinner" id="spin"></div>
 
-      <div class="card out" id="outAnaliz">
+      <div class="card out wide" id="outAnaliz">
         <h2>🔍 Görsel Analizi</h2>
         <div class="analysis-text" id="analizText"></div>
         <div id="analizTags"></div>
@@ -128,10 +76,10 @@
         <h2>👔 Önerilen Kombin</h2>
         <div class="analysis-text" id="kombinText"></div>
         <div id="kombinList"></div>
-        <div class="total"><span>Toplam</span><span id="toplam"></span></div>
+        <div class="total" id="totalRow"><span>Toplam</span><span id="toplam"></span></div>
       </div>
 
-      <div class="card out" id="outKampanya">
+      <div class="card out wide" id="outKampanya">
         <h2>📢 Kampanya / Reklam Metni</h2>
         <div class="campaign" id="kampanyaText"></div>
       </div>
@@ -139,158 +87,7 @@
   </div>
 </main>
 
-<!-- Ayarlar, promptlar ve katalog ayrı dosyalarda — sadece onları düzenleyin -->
-<script src="ai/config.js"></script>
 <script src="ai/prompts.js"></script>
-<script src="data/catalog.js"></script>
-<script>
-const $ = id => document.getElementById(id);
-let catalog = CATALOG.slice();
-let imgB64 = null, imgMime = null;
-$("catInfo").textContent = `data/catalog.js içinden ${catalog.length} ürün yüklendi.`;
-
-// --- görsel yükleme ---
-const drop = $("drop"), fileInp = $("file");
-drop.onclick = () => fileInp.click();
-drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
-drop.ondragleave = () => drop.classList.remove("over");
-drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); loadImg(e.dataTransfer.files[0]); };
-fileInp.onchange = () => loadImg(fileInp.files[0]);
-
-function loadImg(f) {
-  if (!f || !f.type.startsWith("image/")) return;
-  const r = new FileReader();
-  r.onload = () => {
-    imgB64 = r.result.split(",")[1];
-    imgMime = f.type;
-    drop.innerHTML = `<img src="${r.result}">`;
-    setStep(1, "done");
-    updateGo();
-  };
-  r.readAsDataURL(f);
-}
-
-// --- API key: önce config.js, yoksa arayüz kutusu ---
-if (CONFIG.API_KEY) {
-  $("apiKey").value = CONFIG.API_KEY;
-  $("keyRow").style.display = "none";
-} else {
-  $("apiKey").value = localStorage.getItem("gk") || "";
-}
-$("apiKey").oninput = updateGo;
-function updateGo() { $("go").disabled = !imgB64; }
-updateGo();
-
-// --- CSV yükleme (basit parser: virgül/noktalı virgül ayraçlı, ilk satır başlık) ---
-$("csv").onchange = e => {
-  const f = e.target.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = () => {
-    const parsed = parseCSV(r.result);
-    if (parsed.length) { catalog = parsed; $("catInfo").textContent = `${parsed.length} ürün yüklendi (${f.name})`; }
-    else $("catInfo").textContent = "CSV okunamadı, data/catalog.js kullanılıyor.";
-  };
-  r.readAsText(f, "utf-8");
-};
-
-function parseCSV(text) {
-  const lines = text.trim().split(/\r?\n/).filter(l => l.trim());
-  if (lines.length < 2) return [];
-  const sep = lines[0].includes(";") ? ";" : ",";
-  const head = lines[0].split(sep).map(h => h.trim().toLowerCase());
-  return lines.slice(1).map(l => {
-    const c = l.split(sep), o = {};
-    head.forEach((h, i) => o[h] = (c[i] || "").trim());
-    o.ad = o.ad || o.urun || o.name || c[0];
-    o.fiyat = parseFloat(String(o.fiyat || o.price || 0).replace(",", ".")) || 0;
-    return o;
-  }).filter(o => o.ad);
-}
-console.assert(parseCSV("ad,fiyat\nTişört,199.99")[0].fiyat === 199.99, "csv parser broken");
-
-// --- akış adımları ---
-function setStep(n, cls) {
-  const el = document.querySelector(`.step[data-s="${n}"]`);
-  el.classList.remove("active", "done");
-  if (cls) el.classList.add(cls);
-}
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-// --- ana akış: tek Gemini çağrısı (görsel + katalog + prompt) ---
-// --- ana akış: Güvenli Node.js Sunucu Çağrısı (API Key frontend'de YOK) ---
-$("go").onclick = async () => {
-  $("err").style.display = "none";
-  document.querySelectorAll(".out").forEach(o => o.classList.remove("show"));
-  [2,3,4,5].forEach(n => setStep(n, null));
-  $("go").disabled = true;
-  $("spin").style.display = "block";
-  setStep(2, "active");
-
-  try {
-    // Arayüzünüzün orijinal 'catalog' dizisini kullanıyoruz
-    const catStr = catalog.map((p, i) => `${i}| ${p.ad} | ${p.kategori || ""} | ${p.renk || ""} | ${p.fiyat} TL`).join("\n");
-    const prompt = PROMPTS.build(catStr, $("style").value, $("budget").value);
-
-    const formData = new FormData();
-    if (!fileInp.files[0]) throw new Error("Lütfen analiz için bir görsel seçin!");
-    
-    formData.append('gorsel', fileInp.files[0]); 
-    formData.append('prompt', prompt);
-
-    const res = await fetch("/api/generate", {
-      method: "POST",
-      body: formData
-    });
-    
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.detay || `Sunucu hatası: ${res.status}`);
-    }
-    
-    const out = await res.json();
-    if (out.error) throw new Error(out.error);
-
-    $("spin").style.display = "none";
-    await render(out);
-  } catch (e) {
-    $("spin").style.display = "none";
-    $("err").textContent = e.message;
-    $("err").style.display = "block";
-    setStep(2, null);
-  }
-  $("go").disabled = false;
-};
-
-// --- çıktıları adım adım göster ---
-async function render(o) {
-  setStep(2, "done"); setStep(3, "active");
-  $("analizText").textContent = o.analiz || "";
-  $("analizTags").innerHTML =
-    (o.tespit_edilen_stil ? `<span class="tag">🎯 ${o.tespit_edilen_stil}</span>` : "") +
-    (o.parcalar || []).map(p => `<span class="tag">${p}</span>`).join("");
-  $("outAnaliz").classList.add("show");
-  await sleep(600);
-
-  setStep(3, "done"); setStep(4, "active");
-  const row = p => `<div class="item"><span>${p.ad}${p.kategori ? " · " + p.kategori : ""}${p.renk ? " · " + p.renk : ""}</span><span class="price">${p.fiyat.toFixed(2)} TL</span></div>`;
-  const pick = idxs => (idxs || []).map(i => catalog[i]).filter(Boolean); // uydurma index'leri eler
-  $("urunList").innerHTML = pick(o.eslesen_urunler).map(row).join("") || "<i>Eşleşme bulunamadı.</i>";
-  $("outUrunler").classList.add("show");
-  await sleep(600);
-
-  setStep(4, "done"); setStep(5, "active");
-  const komb = pick(o.kombin);
-  $("kombinText").textContent = o.kombin_aciklama || "";
-  $("kombinList").innerHTML = komb.map(row).join("");
-  // toplam fiyatı model değil, kod hesaplar → fiyat halüsinasyonu imkânsız
-  $("toplam").textContent = komb.reduce((s, p) => s + p.fiyat, 0).toFixed(2) + " TL";
-  $("outKombin").classList.add("show");
-  await sleep(600);
-
-  setStep(5, "done");
-  $("kampanyaText").textContent = o.kampanya_metni || "";
-  $("outKampanya").classList.add("show");
-}
-</script>
+<script src="app.js"></script>
 </body>
 </html>

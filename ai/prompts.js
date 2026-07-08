@@ -49,7 +49,7 @@ ${this.KAMPANYA_ORNEKLERI}
 ${stil ? "Müşterinin stil tercihi: " + stil + "." : ""}
 ${butce ? "Bütçe üst limiti: " + butce + " TL. Kombinin toplamı bunu aşmasın." : ""}
 
-Ürün kataloğu (index| ad | kategori | renk | fiyat):
+Ürün kataloğu (her satır: index| ürün bilgileri):
 ${katalog}
 
 Görevin: Görseli analiz et, katalogdan benzer ürünleri bul, kombin öner ve kampanya metni yaz.
