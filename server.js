@@ -1,3 +1,7 @@
+// Bazı ağlarda Google API'ye giden IPv6 yolu kararsız olup "fetch failed" hatasına yol açıyor;
+// Node'un DNS çözümünü IPv4 önceliğine alarak bunu önlüyoruz.
+require('dns').setDefaultResultOrder('ipv4first');
+
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
