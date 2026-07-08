@@ -48,3 +48,4 @@ button.primary:disabled { background:#b9c5d6; cursor:not-allowed; }
 .spinner { display:none; grid-column:1 / -1; margin:24px auto; width:34px; height:34px; border:4px solid #eaf2fd; border-top-color:#0d5eba; border-radius:50%; animation:spin .8s linear infinite; }
 @keyframes spin { to{transform:rotate(360deg);} }
 .error { display:none; background:#fef2f2; color:#b91c1c; padding:10px 14px; border-radius:8px; font-size:.82rem; margin-top:12px; }
+#rawText { white-space:pre-wrap; font-size:.78rem; font-family:Consolas,monospace; color:#3d4b5f; max-height:340px; overflow:auto; }

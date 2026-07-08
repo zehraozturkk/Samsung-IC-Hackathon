@@ -67,6 +67,8 @@ $("go").onclick = async () => {
   try {
     const res = await fetch("/api/generate", { method: "POST", body: fd });
     const out = await res.json();
+    $("rawText").textContent = JSON.stringify(out, null, 2);
+    $("outRaw").classList.add("show");
     if (!res.ok) throw new Error(out.detay || out.error || `Sunucu hatası: ${res.status}`);
     console.log("CoT / düşünme adımları:", out.dusunme_adimlari); // rapor + demo için
     $("spin").style.display = "none";
