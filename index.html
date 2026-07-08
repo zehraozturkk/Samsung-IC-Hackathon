@@ -178,7 +178,7 @@ if (CONFIG.API_KEY) {
   $("apiKey").value = localStorage.getItem("gk") || "";
 }
 $("apiKey").oninput = updateGo;
-function updateGo() { $("go").disabled = !(imgB64 && $("apiKey").value.trim()); }
+function updateGo() { $("go").disabled = !imgB64; }
 updateGo();
 
 // --- CSV yükleme (basit parser: virgül/noktalı virgül ayraçlı, ilk satır başlık) ---
@@ -217,9 +217,8 @@ function setStep(n, cls) {
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // --- ana akış: tek Gemini çağrısı (görsel + katalog + prompt) ---
+// --- ana akış: Güvenli Node.js Sunucu Çağrısı (API Key frontend'de YOK) ---
 $("go").onclick = async () => {
-  const key = $("apiKey").value.trim();
-  if (!CONFIG.API_KEY) localStorage.setItem("gk", key);
   $("err").style.display = "none";
   document.querySelectorAll(".out").forEach(o => o.classList.remove("show"));
   [2,3,4,5].forEach(n => setStep(n, null));
@@ -227,25 +226,30 @@ $("go").onclick = async () => {
   $("spin").style.display = "block";
   setStep(2, "active");
 
-  const catStr = catalog.map((p, i) => `${i}| ${p.ad} | ${p.kategori || ""} | ${p.renk || ""} | ${p.fiyat} TL`).join("\n");
-  const prompt = PROMPTS.build(catStr, $("style").value, $("budget").value);
-
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${CONFIG.MODEL}:generateContent?key=${key}`, {
+    // Arayüzünüzün orijinal 'catalog' dizisini kullanıyoruz
+    const catStr = catalog.map((p, i) => `${i}| ${p.ad} | ${p.kategori || ""} | ${p.renk || ""} | ${p.fiyat} TL`).join("\n");
+    const prompt = PROMPTS.build(catStr, $("style").value, $("budget").value);
+
+    const formData = new FormData();
+    if (!fileInp.files[0]) throw new Error("Lütfen analiz için bir görsel seçin!");
+    
+    formData.append('gorsel', fileInp.files[0]); 
+    formData.append('prompt', prompt);
+
+    const res = await fetch("/api/generate", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [
-          { inline_data: { mime_type: imgMime, data: imgB64 } },
-          { text: prompt }
-        ]}],
-        generationConfig: { response_mime_type: "application/json" }
-      })
+      body: formData
     });
-    if (!res.ok) throw new Error(`API hatası: ${res.status} — ${(await res.text()).slice(0, 200)}`);
-    const data = await res.json();
-    const out = JSON.parse(data.candidates[0].content.parts[0].text);
-    console.log("CoT / düşünme adımları:", out.dusunme_adimlari); // rapor + demo için
+    
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.detay || `Sunucu hatası: ${res.status}`);
+    }
+    
+    const out = await res.json();
+    if (out.error) throw new Error(out.error);
+
     $("spin").style.display = "none";
     await render(out);
   } catch (e) {

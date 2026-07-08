@@ -1,0 +1,19 @@
+{
+  "name": "samsung-ic-hackathon",
+  "version": "1.0.0",
+  "description": "Müşterinin yüklediği kıyafet/kombin görselini Gemini 2.5 Flash ile analiz eder,\r LC Waikiki kataloğundan benzer ürünleri eşleştirir, kombin önerir ve kampanya metni üretir.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.2.0"
+  }
+}
